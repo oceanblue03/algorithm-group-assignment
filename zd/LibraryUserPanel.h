@@ -1,4 +1,5 @@
 #include <iostream>
+#include "algorithms.h"
 using namespace std;
 
 class LibraryUserPanel {
