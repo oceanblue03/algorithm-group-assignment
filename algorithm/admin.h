@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <limits>
+#include <vector>
 
 using namespace std;
 
@@ -14,6 +15,10 @@ struct Books{
     string author;
     string category;
     string availability;
+
+    bool operator <= (const Books& other) const {
+        return ID <= other.ID;
+    }
 };
 
 //struct for Transactions
@@ -66,6 +71,14 @@ class Admin{
         cout << "Enter the ID of the book: ";
         cin >> newbook.ID;
         cin.ignore();
+
+        for(int i = 0 ; i < *bookCount ; i++){
+            if(books[i].ID == newbook.ID){
+                cout << "Books with ID " << newbook.ID << " is already exist." << endl;
+                return;
+            }
+        }
+        
         cout << "Enter the book title: ";
         getline(cin , newbook.Title);
         cout << "Enter the author of the book: ";
@@ -76,16 +89,20 @@ class Admin{
         getline(cin , newbook.availability);
 
         books[*bookCount] = newbook;
-        (*bookCount)++;
+        (*bookCount)++; 
 
-        cout << "Books added successfully. " << endl;
+        cout << "Book added successfully." << endl;      
     }
 
-    int searchBookbyID (struct Books books[] , int bookCount , int ID){
+    void searchBookbyID (struct Books books[] , int bookCount , int ID){
 
-        
-        
-        return ID;
+        int bookIndex = binarySearch(books , 0 , bookCount - 1 , ID);
+
+        if(bookIndex != -1){
+            cout << "Book found: " << books[bookIndex].Title << " by " << books[bookIndex].author << endl;
+        }else{
+            cout << "Book with ID " << ID << " not found." << endl;
+        }
     }
 
     void editBook (struct Books books[] , int bookCount , int ID){
@@ -128,6 +145,24 @@ class Admin{
 
     void deleteBook (struct Books books[] , int* bookCount , int ID){
 
+        if(*bookCount != -1){
+
+            for(int i = 0 ; i < *bookCount ; i++){
+                if(books[i].ID == ID){
+                    (*bookCount)--;
+
+                    for(int j = i ; j < *bookCount ; j++){
+                        books[j] = books[j + 1];
+                    }
+
+                    break;
+                }
+            }
+        }else{
+            cout << "Book with ID " << ID << " is not found." << endl;
+        }
+
+        cout << "Book with ID " << ID << " successfully deleted." << endl;
     }
 
     void viewUnsortedBooks (const struct Books books[] , int bookCount){
@@ -155,9 +190,14 @@ class Admin{
 
     void sortBooks (struct Books books[] , int bookCount){
 
+        mergeSort(books , 0 , bookCount - 1);
+        cout << "The books are sorted." << endl;
+
     }
 
     void displayBooks (struct Books books[] , int bookCount){
+
+        
 
     }
 
@@ -168,6 +208,73 @@ class Admin{
 
     int searchReceipt (struct Transactions transaction[] , int transactionCount){
         return 0;
+    }
+
+    int binarySearch(struct Books books[] , int low , int high , int ID){
+
+        while(low <= high){
+
+            int mid = (low + high) / 2;
+
+            if(books[mid].ID == ID){
+                return mid;
+            }else if(books[mid].ID > ID){
+                return binarySearch(books , low , mid - 1 , ID);
+            }else{
+                return binarySearch(books , mid + 1 , high , ID);
+            }
+        }
+
+        return -1;
+    }
+
+    void merge(struct Books books[] , int left , int mid , int right){
+
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        Books* temp1 = new Books[n1];
+        Books* temp2 = new Books[n2];
+
+        for(int i = 0 ; i < n1 ; i++){
+            temp1[i] = books[left + i];
+        }
+        for(int j = 0 ; j < n2 ; j++){
+            temp2[j] = books[mid + 1 + j];
+        }
+
+        int i = 0 , j = 0 , k = left;
+        while(i < n1 && j < n2){
+            if(temp1[i].ID <= temp2[j].ID){
+                books[k] = temp1[i];
+                i++;
+            }else{
+                books[k] = temp2[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1){
+            books[k] = temp1[i];
+            i++ , k++;
+        }
+
+        while (j < n2){
+            books[k] = temp2[j];
+            j++ , k++;
+        }
+    }
+
+    void mergeSort(struct Books books[] , int left , int right){
+
+        if(left < right){
+            int mid = (left + right) / 2;
+
+            mergeSort(books , left , mid);
+            mergeSort(books , mid + 1 , right);
+            merge(books , left , mid , right);
+        }    
     }
 
 };

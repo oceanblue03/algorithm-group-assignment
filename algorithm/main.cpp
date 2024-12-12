@@ -33,14 +33,19 @@ int main(){
 
         cin >> option;
 
-
         switch(option){
             case 1 : 
+
                 admin.addBook(library , &count);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 2 : 
+
+                cout << "Enter the book ID you wish to find: ";
+                cin >> ID;
+                cin.ignore();
+
                 admin.searchBookbyID(library , count , ID);
                 cout << "----------------------------------------" << endl;
                 break;
@@ -56,36 +61,47 @@ int main(){
                 break;
 
             case 4 : 
+
+                cout << "Enter the book ID that you wish to delete: ";
+                cin >> ID;
+                cin.ignore();
+
                 admin.deleteBook(library , &count , ID);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 5 : 
+
                 admin.viewUnsortedBooks(library , count);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 6 : 
+
                 admin.sortBooks(library , count);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 7 : 
+
                 admin.displayBooks(library , count);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 8 : 
+
                 admin.viewReceipt(transaction , count);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 9 : 
+
                 admin.searchReceipt(transaction , count);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 10 : 
+            
                 cout << "Going back to main menu" << endl;
                 return 0;
         }
