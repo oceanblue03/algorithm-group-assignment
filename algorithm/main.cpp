@@ -8,7 +8,7 @@ int main(){
     struct Books library[10];
     struct Transactions transaction[10];
     int count = 0;
-    string ID;
+    int ID;
     string username = "Hi";
     string password = "bye";
     Admin admin;
@@ -23,7 +23,7 @@ int main(){
         cout << "2. Search book" << endl;
         cout << "3. Edit book details" << endl;
         cout << "4. Delete book" << endl;
-        cout << "5. View list of books" << endl;
+        cout << "5. View list of books (unsorted)" << endl;
         cout << "6. Sort books" << endl;
         cout << "7. Display books" << endl;
         cout << "8. View transaction receipt" << endl;
@@ -32,6 +32,7 @@ int main(){
         cout << "Choose an option: ";
 
         cin >> option;
+
 
         switch(option){
             case 1 : 
@@ -45,6 +46,11 @@ int main(){
                 break;
 
             case 3 : 
+
+                cout << "Enter the book ID you wish to edit: ";
+                cin >> ID;
+                cin.ignore();
+
                 admin.editBook(library , count , ID);
                 cout << "----------------------------------------" << endl;
                 break;

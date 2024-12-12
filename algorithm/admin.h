@@ -3,16 +3,17 @@
 
 #include <iostream>
 #include <string>
+#include <limits>
 
 using namespace std;
 
 //struct for Books
 struct Books{
-    string ID;
+    int ID;
     string Title;
     string author;
     string category;
-    bool availability;
+    string availability;
 };
 
 //struct for Transactions
@@ -62,44 +63,74 @@ class Admin{
         
         Books newbook;
 
-        cin.ignore();
         cout << "Enter the ID of the book: ";
-        getline(cin , newbook.ID);
+        cin >> newbook.ID;
+        cin.ignore();
         cout << "Enter the book title: ";
         getline(cin , newbook.Title);
         cout << "Enter the author of the book: ";
         getline(cin , newbook.author);
         cout << "Enter the category of the book: ";
         getline(cin , newbook.category);
-        newbook.availability = true;
-        
+        cout << "Enter the availability of the book (0 - unavailable / 1 - available): ";
+        getline(cin , newbook.availability);
+
         books[*bookCount] = newbook;
         (*bookCount)++;
 
         cout << "Books added successfully. " << endl;
     }
 
-    int searchBookbyID (struct Books books[] , int bookCount , string ID){
-        return 0;
+    int searchBookbyID (struct Books books[] , int bookCount , int ID){
+
+        
+        
+        return ID;
     }
 
-    void editBook (struct Books books[] , int bookCount , string ID){
+    void editBook (struct Books books[] , int bookCount , int ID){
 
+        bool bookExist = false;
+
+        for(int i  = 0 ; i < bookCount ; i++){
+            if(books[i].ID == ID){
+                bookExist = true;
+
+                cout << "Enter the book title: ";
+                getline(cin , books[i].Title);
+                cout << "Enter the author of the book: ";
+                getline(cin , books[i].author);
+                cout << "Enter the category of the book: ";
+                getline(cin , books[i].category);
+                cout << "Enter the book availability (0 - unavailable / 1 - available): ";
+                getline(cin , books[i].availability);
+
+                if(books[i].availability == "0" || books[i].availability == "1"){
+                    if(books[i].availability == "1"){
+                        cout << "Availability: " << "available" << endl;
+                    }else if(books[i].availability == "0"){
+                        cout << "Availability: " << "unavailable" << endl;
+                    }
+                }else{
+                    cout << "Invalid value. Keeping the previous value." << endl;
+                }
+
+                cout << "Book edited successfully" << endl;
+                return;
+            }
+        }
+        
+        if(!bookExist){
+            cout << "The book does not exist in this library." << endl;
+        }
+     
     }
 
-    void deleteBook (struct Books books[] , int* bookCount , string ID){
+    void deleteBook (struct Books books[] , int* bookCount , int ID){
 
     }
 
     void viewUnsortedBooks (const struct Books books[] , int bookCount){
-
-    }
-
-    void sortBooks (struct Books books[] , int bookCount){
-
-    }
-
-    void displayBooks (struct Books books[] , int bookCount){
 
         if(bookCount == 0){
             cout << "No books to display" << endl;
@@ -112,13 +143,22 @@ class Admin{
             cout << "Title: " << books[i].Title << endl;
             cout << "Author: " << books[i].author << endl;
             cout << "Category: " << books[i].category << endl;
-            if(books[i].availability == true){
+            if(books[i].availability == "1"){
                 cout << "Availability: " << "available" << endl;
-            }else{
+            }else if(books[i].availability == "0"){
                 cout << "Availability: " << "unavailable" << endl;
             }
             cout << endl;
         }
+
+    }
+
+    void sortBooks (struct Books books[] , int bookCount){
+
+    }
+
+    void displayBooks (struct Books books[] , int bookCount){
+
     }
 
     //Transaction management
