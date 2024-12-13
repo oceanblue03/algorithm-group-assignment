@@ -3,8 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include <limits>
-#include <vector>
 
 using namespace std;
 
@@ -15,17 +13,14 @@ struct Books{
     string author;
     string category;
     string availability;
-
-    bool operator <= (const Books& other) const {
-        return ID <= other.ID;
-    }
 };
 
 //struct for Transactions
 struct Transactions{
     int receiptNumber;
-    char userID [50];
-    char details [200];
+    int bookID;
+    string userID;
+    string date;
 };
 
 class Admin{
@@ -96,7 +91,7 @@ class Admin{
 
     void searchBookbyID (struct Books books[] , int bookCount , int ID){
 
-        int bookIndex = binarySearch(books , 0 , bookCount - 1 , ID);
+        int bookIndex = binarySearchBooks(books , 0 , bookCount - 1 , ID);
 
         if(bookIndex != -1){
             cout << "Book found: " << books[bookIndex].Title << " by " << books[bookIndex].author << endl;
@@ -188,29 +183,60 @@ class Admin{
 
     }
 
-    void sortBooks (struct Books books[] , int bookCount){
+    void sort_and_display_ID (struct Books books[] , int bookCount){
 
         mergeSort(books , 0 , bookCount - 1);
-        cout << "The books are sorted." << endl;
+        cout << "The books are sorted in ascending order based on ID." << endl;
+
+        for(int i = 0 ; i < bookCount ; i++){
+            cout << books[i].ID << ": " << books[i].Title << " by " << books[i].author << endl;
+        }
 
     }
 
-    void displayBooks (struct Books books[] , int bookCount){
+    void sort_and_display_Title (struct Books books[] , int bookCount){
 
-        
+        bubbleSort(books , bookCount);
+        cout << "The books are sorted lexicographically based on books' title." << endl;
+
+        for(int i = 0 ; i < bookCount; i++){
+            cout << "Book " << i + 1 << ": " << books[i].Title << " by " << books[i].author << " with ID " << books[i].ID << endl; 
+        }
 
     }
 
     //Transaction management
     void viewReceipt (struct Transactions transaction[] , int transactionCount){
 
+        if(transactionCount == 0){
+            cout << "No transaction history." << endl;
+            return;
+        }
+        
+        selectionSort(transaction , transactionCount);
+
+        for(int i = 0 ; i < transactionCount ; i++){
+            cout << "Receipt Number: " << transaction[i].receiptNumber << endl;
+            cout << "UserID: " << transaction[i].userID << endl;
+            cout << "BookID: " << transaction[i].bookID << endl;
+            cout << "Date: " << transaction[i].date << endl;
+        }
+
     }
 
-    int searchReceipt (struct Transactions transaction[] , int transactionCount){
-        return 0;
+    void searchReceipt (struct Transactions transaction[] , int transactionCount , int userID){
+
+        int userIndex = binarySearchReceipt(transaction , 0 , transactionCount - 1 , userID);
+
+        if(userIndex != -1){
+            cout << "Receipt found: " << transaction[userIndex].userID << endl;
+            cout << "Date: " << transaction[userIndex].date << endl;
+        }else{
+            cout << "Receipt with this ID " << userID << " not found." << endl;
+        }
     }
 
-    int binarySearch(struct Books books[] , int low , int high , int ID){
+    int binarySearchBooks(struct Books books[] , int low , int high , int ID){
 
         while(low <= high){
 
@@ -219,9 +245,9 @@ class Admin{
             if(books[mid].ID == ID){
                 return mid;
             }else if(books[mid].ID > ID){
-                return binarySearch(books , low , mid - 1 , ID);
+                return binarySearchBooks(books , low , mid - 1 , ID);
             }else{
-                return binarySearch(books , mid + 1 , high , ID);
+                return binarySearchBooks(books , mid + 1 , high , ID);
             }
         }
 
@@ -277,6 +303,52 @@ class Admin{
         }    
     }
 
+    void bubbleSort(struct Books books[] , int size){
+        for(int i = 0 ; i < size - 1 ; i++){
+            for(int j = 0 ; j < size - i - 1 ; j++){
+                if(books[j].Title > books[j + 1].Title){
+                    Books temp = books[j];
+                    books[j] = books[j + 1];
+                    books[j + 1] = temp;
+                }              
+            }
+        }
+    }
+
+    void selectionSort(struct Transactions transaction[] , int size){
+        for(int i = 0 ; i < size - 1 ; i++){           
+            int minIndex = i;
+            for(int j = i + 1 ; j < size ; j++){
+                if(transaction[j].receiptNumber < transaction[minIndex].receiptNumber){
+                    minIndex = j;
+                }
+            }
+
+            if(!minIndex){
+                Transactions temp = transaction[i];
+                transaction[i] = transaction[minIndex];
+                transaction[minIndex] = temp;
+            }
+        }
+    }
+
+    int binarySearchReceipt(struct Transactions transaction[] , int low , int high , int userID){
+
+        while(low <= high){
+
+            int mid = (low + high) / 2;
+
+            if(transaction[mid].bookID == userID){
+                return mid;
+            }else if(transaction[mid].bookID > userID){
+                return binarySearchReceipt(transaction , low , mid - 1 , userID);
+            }else{
+                return binarySearchReceipt(transaction , mid + 1 , high , userID);
+            }
+        }
+
+        return -1;
+    }
 };
 
 #endif // ADMIN_H

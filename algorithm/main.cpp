@@ -6,9 +6,10 @@ using namespace std;
 int main(){
 
     struct Books library[10];
-    struct Transactions transaction[10];
+    struct Transactions receipt[10];
     int count = 0;
-    int ID;
+    int bookID;
+    int userID;
     string username = "Hi";
     string password = "bye";
     Admin admin;
@@ -24,8 +25,8 @@ int main(){
         cout << "3. Edit book details" << endl;
         cout << "4. Delete book" << endl;
         cout << "5. View list of books (unsorted)" << endl;
-        cout << "6. Sort books" << endl;
-        cout << "7. Display books" << endl;
+        cout << "6. Sort and display books using bookID" << endl;
+        cout << "7. Sort and display books using Title" << endl;
         cout << "8. View transaction receipt" << endl;
         cout << "9. Search transaction receipt" << endl;
         cout << "10. Exit" << endl;
@@ -43,30 +44,30 @@ int main(){
             case 2 : 
 
                 cout << "Enter the book ID you wish to find: ";
-                cin >> ID;
+                cin >> bookID;
                 cin.ignore();
 
-                admin.searchBookbyID(library , count , ID);
+                admin.searchBookbyID(library , count , bookID);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 3 : 
 
                 cout << "Enter the book ID you wish to edit: ";
-                cin >> ID;
+                cin >> bookID;
                 cin.ignore();
 
-                admin.editBook(library , count , ID);
+                admin.editBook(library , count , bookID);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 4 : 
 
                 cout << "Enter the book ID that you wish to delete: ";
-                cin >> ID;
+                cin >> bookID;
                 cin.ignore();
 
-                admin.deleteBook(library , &count , ID);
+                admin.deleteBook(library , &count , bookID);
                 cout << "----------------------------------------" << endl;
                 break;
 
@@ -78,30 +79,34 @@ int main(){
 
             case 6 : 
 
-                admin.sortBooks(library , count);
+                admin.sort_and_display_ID(library , count);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 7 : 
 
-                admin.displayBooks(library , count);
+                admin.sort_and_display_Title(library , count);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 8 : 
 
-                admin.viewReceipt(transaction , count);
+                admin.viewReceipt(receipt , count);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 9 : 
 
-                admin.searchReceipt(transaction , count);
+                cout << "Please give me your student ID: ";
+                cin >> userID;
+                cin.ignore();
+
+                admin.searchReceipt(receipt , count , userID);
                 cout << "----------------------------------------" << endl;
                 break;
 
             case 10 : 
-            
+
                 cout << "Going back to main menu" << endl;
                 return 0;
         }
