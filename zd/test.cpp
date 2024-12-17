@@ -17,14 +17,19 @@ struct book{
 
 int main()
 {
-    string a;
-    f.open("books.csv");
-    getline(f, a);
-    cout << a << endl;
-    f.clear();
-    f.seekg(0);
-    getline(f, a);
-    cout << a << endl;
+    string str1 = "qweasd";
+    string str2 = "ea";
+    int arr1[6] = {4, 3,2,1,3};
+
+    for (int i = 0; i < str1.length(); i++) {
+        int j = 0;
+        while (str1[i + j] == str2[j]) {
+            j++;
+            if (j == str2.length()) {
+                cout << "test";
+            }
+        }
+    }
 }
 
 void sort(string arr1[]) {

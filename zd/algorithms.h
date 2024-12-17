@@ -11,7 +11,7 @@ const int ARRAY_SIZE = 5;
 ifstream f;
 
 struct Books{
-    string ID;
+    int ID;
     string Title;
     string author;
     string category;
@@ -45,6 +45,17 @@ bool compareStr(string a, string b) { // true if a < b
     }
 }
 
+void setupLibrary(Books library[]) {
+            f.open("books.csv");
+            for (int i = 0; i < ARRAY_SIZE; i++) {
+                library[i].ID = stoi(getCell(i + 1, 0));
+                library[i].Title = getCell(i + 1, 1);
+                library[i].author = getCell(i + 1, 2);
+                library[i].category = getCell(i + 1, 3);
+                library[i].availability = true;
+            }
+        }
+
 void displayLibrary(Books library[]) {
     for (size_t i = 0; i < ARRAY_SIZE; i++) {
         cout << "Book " << i + 1 << ": \n";
@@ -54,7 +65,6 @@ void displayLibrary(Books library[]) {
         cout << "category: " << library[i].category << endl;
         cout << "availability: " << library[i].availability << endl << endl;
     }
-    
 }
 
 string getCell(int row, int col) {
@@ -75,4 +85,47 @@ string getCell(int row, int col) {
     f.seekg(0);
 
     return b;
+}
+
+int binarySearchBooks(struct Books books[] , int low , int high , int ID){
+
+    while(low <= high){
+
+        int mid = (low + high) / 2;
+
+        if(books[mid].ID == ID){
+            return mid;
+        }else if(books[mid].ID > ID){
+            return binarySearchBooks(books , low , mid - 1 , ID);
+        }else{
+            return binarySearchBooks(books , mid + 1 , high , ID);
+        }
+    }
+
+    return -1;
+}
+
+void searchBookbyID (struct Books books[] , int bookCount , int ID){
+
+    int bookIndex = binarySearchBooks(books , 0 , bookCount - 1 , ID);
+
+    if(bookIndex != -1){
+        cout << "Book found: " << books[bookIndex].Title << " by " << books[bookIndex].author << endl;
+    }else{
+        cout << "Book with ID " << ID << " not found." << endl;
+    }
+}
+
+bool isSubstring(string str1, string str2) {
+    for (int i = 0; i < str1.length(); i++) {
+        int j = 0;
+        while (str1[i + j] == str2[j]) {
+            j++;
+            if (j == str2.length()) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
