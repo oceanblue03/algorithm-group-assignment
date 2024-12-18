@@ -17,19 +17,13 @@ struct book{
 
 int main()
 {
-    string str1 = "qweasd";
-    string str2 = "ea";
-    int arr1[6] = {4, 3,2,1,3};
-
-    for (int i = 0; i < str1.length(); i++) {
-        int j = 0;
-        while (str1[i + j] == str2[j]) {
-            j++;
-            if (j == str2.length()) {
-                cout << "test";
-            }
-        }
-    }
+    srand(time(0));
+  
+  // Generate a random number between 0 and 100
+  int randomNum = rand() % 101;
+  
+  cout << randomNum;
+  return 0;
 }
 
 void sort(string arr1[]) {
