@@ -1,12 +1,16 @@
 #include <iostream>
 #include "algorithms.h"
+
 using namespace std;
 
 class LibraryUserPanel {
     public:
         int userInput;
         string searchInput;
+        User user;
         Books library[ARRAY_SIZE];
+        Transactions transactionArray[ARRAY_SIZE];
+        int transactionArrayCounter = 0;
 
         LibraryUserPanel() {}
 
@@ -21,19 +25,19 @@ class LibraryUserPanel {
             switch (userInput) {
                 case 1:
                     searchBooks();
-                    break;
+                    menu();
                 case 2:
                     borrowBooks();
-                    break;
+                    menu();
                 case 3:
                     displayLibrary();
-                    break;
+                    menu();
                 case 4:
                     viewTransactionHistory();
-                    break;
+                    menu();
                 default:
                     handleError();
-                    break;
+                    menu();
             }
         }
 
@@ -64,18 +68,73 @@ class LibraryUserPanel {
                 }       
             }
 
-            menu();
+            cout << "do you want to borrow any books?\n1. yes\n2. no\n ";
+            cin >> userInput;
+            switch (userInput) {
+                case 1:
+                    borrowBooks();
+                case 2:
+                    menu();
+                default:
+                    handleError();
+            }
         }
 
         void borrowBooks() {
-            searchBooks();
+            cout << "please enter the id of the book you want to borrow: ";
+            cin >> userInput;
+
+            Books borrowedBook;
+            for (int i = 0; i < ARRAY_SIZE; i++) {
+                if (userInput == library[i].ID) {
+                    borrowedBook = library[i];
+                }
+            }
+
+            cout << "book details:\n";
+            cout << "ID: " << borrowedBook.ID << endl;
+            cout << "Title: " << borrowedBook.Title << endl;
+            cout << "author: " << borrowedBook.author << endl;
+            cout << "category: " << borrowedBook.category << endl;
+
+            cout << "are you sure you want to borrow?\n1. yes\n2. no\n ";
+            cin >> userInput;
+            switch (userInput) {
+                case 1:
+                    break;
+                case 2:
+                    menu();
+                default:
+                    handleError();
+            }
+
+            Transactions t;
+            t.bookID = borrowedBook.ID;
+            t.date = "18/12/2024";
+            srand(time(0));
+            int randomNum = rand();
+            t.receiptNumber = randomNum;
+            t.userID = user.id;
+            transactionArray[transactionArrayCounter] = t;
+            transactionArrayCounter++;
+
+            cout << "transaction successful! do you want to borrow more books?\n1. yes\n2. no\n ";
+            cin >> userInput;
+            switch (userInput) {
+                case 1:
+                    borrowBooks();
+                case 2:
+                    menu();
+                default:
+                    handleError();
+            }
 
             menu();
         }
 
         void displayLibrary() {
             for (int i = 0; i < ARRAY_SIZE; i++) {
-                cout << "Book " << i + 1 << ": \n";
+                cout << "\nBook " << i + 1 << ": \n";
                 cout << "ID: " << library[i].ID << endl;
                 cout << "Title: " << library[i].Title << endl;
                 cout << "author: " << library[i].author << endl;
@@ -87,6 +146,11 @@ class LibraryUserPanel {
         }
 
         void viewTransactionHistory() {
+            cout << "\n";
+            for (int i = 0; i < transactionArrayCounter; i++) {
+                displayTransaction(transactionArray[i]);
+                cout << "\n";
+            }
 
             menu();
         }

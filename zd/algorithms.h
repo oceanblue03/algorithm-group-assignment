@@ -3,20 +3,36 @@
 #include <sstream>
 using namespace std;
 
+//struct for Books
+struct Books{
+    int ID;
+    string Title;
+    string author;
+    string category;
+    string availability;
+};
+
+//struct for Transactions
+struct Transactions{
+    int receiptNumber;
+    int bookID;
+    string userID;
+    string date;
+};
+
+struct User {
+    string username;
+    string password;
+    string role;
+    int id;
+};
+
 bool compareStr(string a, string b);
 void sort(string library[]);
 string getCell(int row, int col);
 
 const int ARRAY_SIZE = 5;
 ifstream f;
-
-struct Books{
-    int ID;
-    string Title;
-    string author;
-    string category;
-    bool availability;
-};
 
 void sortByTitle(Books library[]) {
     for (int i = 0; i < ARRAY_SIZE; i++) {
@@ -55,6 +71,12 @@ void setupLibrary(Books library[]) {
                 library[i].availability = true;
             }
         }
+
+void displayTransaction(Transactions transaction) {
+    cout << "book ID: " << transaction.bookID << endl;
+    cout << "borrow date: " << transaction.date << endl;
+    cout << "receipt number: " << transaction.receiptNumber << endl;
+}
 
 void displayLibrary(Books library[]) {
     for (size_t i = 0; i < ARRAY_SIZE; i++) {

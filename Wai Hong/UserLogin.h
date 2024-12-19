@@ -10,6 +10,7 @@ struct User {
     string username;
     string password;
     string role;
+    int id;
 };
 
 vector<User> readUsersFromCSV(const string& filename) {
