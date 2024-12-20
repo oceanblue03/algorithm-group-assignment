@@ -25,39 +25,6 @@ struct Transactions{
 
 class Admin{
     public:
-    bool authentication(const string* username , const string* password){
-    
-        const int max_attempts = 3;
-        int attempts = 0;
-        string user , pass;
-
-        while (attempts < max_attempts){
-            cout << "Enter your username: ";
-            getline(cin , user);
-
-            if(user == *username){
-                cout << "Enter your password: ";
-                getline(cin , pass);
-
-                if(pass == *password){
-                    cout << "Welcome" << endl;
-                    return true;
-                }else{
-                    cout << "Incorrect password" << endl;
-                }
-            }else{
-                cout << "Incorrect username" << endl;
-            }
-
-            attempts++;
-            cout << (max_attempts - attempts) << " attempts remaining" << endl;
-            cout << "Try again" << endl;
-        }
-
-        cout << "Too many failed attempts. Exiting...." << endl;
-        return false;
-    }
-
     //Books management
     void addBook (struct Books books[] , int* bookCount){
         

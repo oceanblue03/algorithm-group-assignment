@@ -19,7 +19,8 @@ class LibraryUserPanel {
 
         LibraryUserPanel() {}
 
-        void menu() {
+        void menu(int* transactionCount, int* bookCount) {
+            *transactionCount = transactionArrayCounter;
             cout << "\nwhat would you like to do?\n";
             cout << "1. search for books\n";
             cout << "2. borrow books\n";
@@ -31,37 +32,43 @@ class LibraryUserPanel {
             switch (userInput) {
                 case 1:
                     searchBooks();
-                    menu();
+                    menu(transactionCount, bookCount);
                     break;
                 case 2:
                     borrowBooks();
-                    menu();
+                    menu(transactionCount, bookCount);
                     break;
                 case 3:
-                    displayLibrary();
-                    menu();
+                    displayLibrary(bookCount);
+                    menu(transactionCount, bookCount);
                     break;
                 case 4:
                     viewTransactionHistory();
-                    menu();
+                    menu(transactionCount, bookCount);
                     break;
                 case 5:
+                    *transactionCount = transactionArrayCounter;
                     return;
                     break;
                 default:
                     handleError();
-                    menu();
+                    menu(transactionCount, bookCount);
             }
+            *transactionCount = transactionArrayCounter;
         }
 
-        void setupLibrary() {
+        void setupLibrary(int count) {
             f.open("books.csv");
-            for (int i = 0; i < ARRAY_SIZE; i++) {
+            for (int i = 0; i < count; i++) {
                 library[i].ID = stoi(getCell(i + 1, 0));
                 library[i].Title = getCell(i + 1, 1);
                 library[i].author = getCell(i + 1, 2);
                 library[i].category = getCell(i + 1, 3);
-                library[i].availability = true;
+                if(stoi(getCell(i + 1, 4)) == 1){
+                    library[i].availability = "true";
+                }else{
+                    library[i].availability = "false";
+                }
             }
         }
 
@@ -168,8 +175,8 @@ class LibraryUserPanel {
             }
         }
 
-        void displayLibrary() {
-            for (int i = 0; i < ARRAY_SIZE; i++) {
+        void displayLibrary(int* count) {
+            for (int i = 0; i < *count; i++) {
                 cout << "\nBook " << i + 1 << ": \n";
                 cout << "ID: " << library[i].ID << endl;
                 cout << "Title: " << library[i].Title << endl;
