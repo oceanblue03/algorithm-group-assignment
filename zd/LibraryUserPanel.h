@@ -1,5 +1,10 @@
+#pragma once
+
+
 #include <iostream>
 #include "algorithms.h"
+#include "UserLogin.h"
+#include "ErrorHandleInput.h"
 
 using namespace std;
 
@@ -15,26 +20,34 @@ class LibraryUserPanel {
         LibraryUserPanel() {}
 
         void menu() {
-            cout << "what would you like to do?\n";
+            cout << "\nwhat would you like to do?\n";
             cout << "1. search for books\n";
             cout << "2. borrow books\n";
             cout << "3. display all books\n";
             cout << "4. view transaction history\n";
+            cout << "5. exit the User Panel\n";
+            userInput =  getOptionInput(5,"Enter: ");
 
-            cin >> userInput;
             switch (userInput) {
                 case 1:
                     searchBooks();
                     menu();
+                    break;
                 case 2:
                     borrowBooks();
                     menu();
+                    break;
                 case 3:
                     displayLibrary();
                     menu();
+                    break;
                 case 4:
                     viewTransactionHistory();
                     menu();
+                    break;
+                case 5:
+                    return;
+                    break;
                 default:
                     handleError();
                     menu();
@@ -53,8 +66,7 @@ class LibraryUserPanel {
         }
 
         void searchBooks() {
-            cout << "please enter the key word: ";
-            cin >> searchInput;
+            searchInput =  getStringInputWithSpaces("please enter the key word: ");
 
             cout << "\nresults:\n";
             for (int i = 0; i < ARRAY_SIZE; i++) {
@@ -69,27 +81,50 @@ class LibraryUserPanel {
             }
 
             cout << "do you want to borrow any books?\n1. yes\n2. no\n ";
-            cin >> userInput;
+
+            userInput =  getOptionInput(2,"Enter: ");
             switch (userInput) {
                 case 1:
                     borrowBooks();
+                    break;
                 case 2:
-                    menu();
+                    return;
+                    break;
                 default:
                     handleError();
             }
         }
 
         void borrowBooks() {
-            cout << "please enter the id of the book you want to borrow: ";
-            cin >> userInput;
+
+            userInput =  getIntegerInput("please enter the id of the book you want to borrow: ");
 
             Books borrowedBook;
+            bool bookExist = false;
             for (int i = 0; i < ARRAY_SIZE; i++) {
                 if (userInput == library[i].ID) {
                     borrowedBook = library[i];
+                    bookExist = true;
                 }
             }
+            if (!bookExist){
+                cout << "Book Id does not exist do you want to enter the id again?\n1. yes\2. no\n";
+                userInput =  getOptionInput(2,"Enter: ");
+                switch (userInput) {
+                case 1:
+                    borrowBooks();
+                    break;
+                case 2:
+                    return;
+                    break;
+                default:
+                    handleError();
+
+                }
+            return;
+
+            }
+            
 
             cout << "book details:\n";
             cout << "ID: " << borrowedBook.ID << endl;
@@ -98,12 +133,13 @@ class LibraryUserPanel {
             cout << "category: " << borrowedBook.category << endl;
 
             cout << "are you sure you want to borrow?\n1. yes\n2. no\n ";
-            cin >> userInput;
+            userInput =  getOptionInput(2,"Enter: ");
             switch (userInput) {
                 case 1:
                     break;
                 case 2:
-                    menu();
+                    return;
+                    break;
                 default:
                     handleError();
             }
@@ -119,17 +155,17 @@ class LibraryUserPanel {
             transactionArrayCounter++;
 
             cout << "transaction successful! do you want to borrow more books?\n1. yes\n2. no\n ";
-            cin >> userInput;
+            userInput =  getOptionInput(2,"Enter: ");
             switch (userInput) {
                 case 1:
                     borrowBooks();
+                    break;
                 case 2:
-                    menu();
+                    return;
+                    break;
                 default:
                     handleError();
             }
-
-            menu();
         }
 
         void displayLibrary() {
@@ -141,8 +177,6 @@ class LibraryUserPanel {
                 cout << "category: " << library[i].category << endl;
                 cout << "availability: " << library[i].availability << endl << endl;
             }
-
-            menu();
         }
 
         void viewTransactionHistory() {
@@ -151,13 +185,11 @@ class LibraryUserPanel {
                 displayTransaction(transactionArray[i]);
                 cout << "\n";
             }
-
-            menu();
         }
 
         void handleError() {
 
-            menu();
+            return;
         }
 };
 

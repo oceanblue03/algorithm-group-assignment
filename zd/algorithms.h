@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -18,13 +20,6 @@ struct Transactions{
     int bookID;
     string userID;
     string date;
-};
-
-struct User {
-    string username;
-    string password;
-    string role;
-    int id;
 };
 
 bool compareStr(string a, string b);

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -30,6 +32,7 @@ vector<User> readUsersFromCSV(const string& filename) {
     }
     file.close();
     return users;
+
 }
 
 User* validateLogin(const vector<User>& users, const string& username, const string& password) {
