@@ -1,6 +1,8 @@
-﻿id,title,author,category
+id,title,author,category,availability,7
+9,A Story,hong,story,1
+3,Bytes of Humanity,Quentin Lowe,Non-Fiction (Technology),1
+2,Echoes of a Silent River,Maribel Harlow,Mystery/Thriller,1
+4,Roots of the Forgotten,Shira Patel,Historical Fiction,1
 0,Shadows Beneath the Aurora,Lila Norwood,Science Fiction,1
 1,The Alchemist's Orchard,Elias Carmichael,Fantasy,1
-2,Echoes of a Silent River,Maribel Harlow,Mystery/Thriller,1
-3,Bytes of Humanity,Quentin Lowe,Non-Fiction (Technology),1
-4,Roots of the Forgotten,Shira Patel,Historical Fiction,1
+10,testing book,hong,unknown,0

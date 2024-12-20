@@ -4,7 +4,9 @@
 
 #include <iostream>
 #include <string>
+
 #include "algorithms.h"
+#include "ErrorHandleInput.h"
 
 using namespace std;
 
@@ -15,9 +17,7 @@ class Admin{
         
         Books newbook;
 
-        cout << "Enter the ID of the book: ";
-        cin >> newbook.ID;
-        cin.ignore();
+        newbook.ID = getIntegerInput("Enter the ID of the book: ");
 
         for(int i = 0 ; i < *bookCount ; i++){
             if(books[i].ID == newbook.ID){
@@ -26,14 +26,17 @@ class Admin{
             }
         }
         
-        cout << "Enter the book title: ";
-        getline(cin , newbook.Title);
-        cout << "Enter the author of the book: ";
-        getline(cin , newbook.author);
-        cout << "Enter the category of the book: ";
-        getline(cin , newbook.category);
-        cout << "Enter the availability of the book (0 - unavailable / 1 - available): ";
-        getline(cin , newbook.availability);
+
+        newbook.Title = getStringInputWithSpaces("Enter the book title: ");
+        newbook.author = getStringInputWithSpaces("Enter the author of the book: ");
+        newbook.category = getStringInputWithSpaces("Enter the category of the book: ");
+        int k;
+        k = getOptionInput(2,"Enter the availability of the book (1. unavailable / 2. available): ");
+        if(k == 1){
+            newbook.availability = "unavailable";
+        }else{
+            newbook.availability = "available";
+        }
 
         books[*bookCount] = newbook;
         (*bookCount)++; 
@@ -58,31 +61,23 @@ class Admin{
 
         for(int i  = 0 ; i < bookCount ; i++){
             if(books[i].ID == ID){
-                bookExist = true;
+                    bookExist = true;
 
-                cout << "Enter the book title: ";
-                getline(cin , books[i].Title);
-                cout << "Enter the author of the book: ";
-                getline(cin , books[i].author);
-                cout << "Enter the category of the book: ";
-                getline(cin , books[i].category);
-                cout << "Enter the book availability (0 - unavailable / 1 - available): ";
-                getline(cin , books[i].availability);
-
-                if(books[i].availability == "0" || books[i].availability == "1"){
-                    if(books[i].availability == "1"){
-                        cout << "Availability: " << "available" << endl;
-                    }else if(books[i].availability == "0"){
-                        cout << "Availability: " << "unavailable" << endl;
+                    books[i].Title = getStringInputWithSpaces("Enter the book title: ");
+                    books[i].author = getStringInputWithSpaces("Enter the author of the book: ");
+                    books[i].category = getStringInputWithSpaces("Enter the category of the book: ");
+                    int k;
+                    k = getOptionInput(2,"Enter the availability of the book (1. unavailable / 2. available): ");
+                    if(k == 1){
+                        books[i].availability = "unavailable";
+                    }else{
+                        books[i].availability = "available";
                     }
-                }else{
-                    cout << "Invalid value. Keeping the previous value." << endl;
-                }
 
-                cout << "Book edited successfully" << endl;
-                return;
+                    cout << "Book edited successfully" << endl;
+                    return;
+                }
             }
-        }
         
         if(!bookExist){
             cout << "The book does not exist in this library." << endl;
@@ -181,10 +176,11 @@ class Admin{
         int userIndex = binarySearchReceipt(transaction , 0 , transactionCount - 1 , userID);
 
         if(userIndex != -1){
-            cout << "Receipt found: " << transaction[userIndex].userID << endl;
+            cout << "Receipt found: " << transaction[userIndex].receiptNumber << endl;
+            cout << "Book id: " << transaction[userIndex].bookID << endl;
             cout << "Date: " << transaction[userIndex].date << endl;
         }else{
-            cout << "Receipt with this ID " << userID << " not found." << endl;
+            cout << "Receipt with this student ID " << userID << " not found." << endl;
         }
     }
 
@@ -290,9 +286,9 @@ class Admin{
 
             int mid = (low + high) / 2;
 
-            if(transaction[mid].bookID == userID){
+            if(transaction[mid].userID == userID){
                 return mid;
-            }else if(transaction[mid].bookID > userID){
+            }else if(transaction[mid].userID > userID){
                 return binarySearchReceipt(transaction , low , mid - 1 , userID);
             }else{
                 return binarySearchReceipt(transaction , mid + 1 , high , userID);

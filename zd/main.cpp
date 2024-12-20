@@ -15,21 +15,18 @@ int main(){
     const int max_attempts = 3;
     string filename = "users.csv";
     string username, password;
-    cout << "1" << endl;
     vector<User> users = readUsersFromCSV(filename);
-    cout << "2" << endl;
     int bookCount = 5;
     int transactionCount = 0;
     LibraryUserPanel libraryUserPanel;
-    cout << "3" << endl;
-    libraryUserPanel.setupLibrary(bookCount);
-    cout << "4" << endl;
+
+    libraryUserPanel.setupLibrary(&bookCount);
+    int studentId = 0;
+
 
 
     struct Books* library = libraryUserPanel.library;
-    cout << "6" << endl;
     struct Transactions* receipt = libraryUserPanel.transactionArray;
-    cout << "7" << endl;
 
     while(true){
         cout << endl;
@@ -74,9 +71,8 @@ int main(){
                             cout << "8. View transaction receipt" << endl;
                             cout << "9. Search transaction receipt" << endl;
                             cout << "10. Exit" << endl;
-                            cout << "Choose an option: ";
 
-                            cin >> option;
+                            option = getOptionInput(10, "Choose an option: ");
 
                             switch(option){
                                 case 1 : 
@@ -87,9 +83,8 @@ int main(){
 
                                 case 2 : 
 
-                                    cout << "Enter the book ID you wish to find: ";
-                                    cin >> bookID;
-                                    cin.ignore();
+                                    bookID =  getIntegerInput("Enter the book ID you wish to find: ");
+
 
                                     admin.searchBookbyID(library , bookCount , bookID);
                                     cout << "----------------------------------------" << endl;
@@ -97,9 +92,8 @@ int main(){
 
                                 case 3 : 
 
-                                    cout << "Enter the book ID you wish to edit: ";
-                                    cin >> bookID;
-                                    cin.ignore();
+
+                                    bookID =  getIntegerInput("Enter the book ID you wish to edit: ");
 
                                     admin.editBook(library , bookCount , bookID);
                                     cout << "----------------------------------------" << endl;
@@ -107,9 +101,7 @@ int main(){
 
                                 case 4 : 
 
-                                    cout << "Enter the book ID that you wish to delete: ";
-                                    cin >> bookID;
-                                    cin.ignore();
+                                    bookID =  getIntegerInput("Enter the book ID you wish to delete: ");
 
                                     admin.deleteBook(library , &bookCount , bookID);
                                     cout << "----------------------------------------" << endl;
@@ -141,9 +133,7 @@ int main(){
 
                                 case 9 : 
 
-                                    cout << "Please give me your student ID: ";
-                                    cin >> userID;
-                                    cin.ignore();
+                                    userID =  getIntegerInput("Please give me your student ID: ");
 
                                     admin.searchReceipt(receipt , transactionCount , userID);
                                     cout << "----------------------------------------" << endl;
@@ -154,6 +144,29 @@ int main(){
                                     cout << "Going back to main menu" << endl;
                                     break;
                             }
+                            ofstream file("books.csv");
+
+                            if (!file.is_open()) {
+                                cerr << "Unable to open file: " << filename << endl;
+                                return 0 ;
+                            }
+
+                            file << "id,title,author,category,availability,"<<bookCount<<"\n";
+                            for(int i = 0; i < bookCount; i++){
+                                file << library[i].ID << ",";
+                                file << library[i].Title << ",";
+                                file << library[i].author << ",";
+                                file << library[i].category << ",";
+                                if (library[i].availability == "available")
+                                {
+                                    file << "1\n";
+                                }else{
+                                    file << "0\n";
+                                }
+                                
+                            }
+
+                            file.close();
                             if(option == 10){
                                 break;
                             }
@@ -161,6 +174,9 @@ int main(){
 
 
                     } else if (loggedInUser->role == "user") {
+                        studentId = getIntegerInput("Please enter your student id: ");
+                        loggedInUser->id = studentId;
+                        cout << loggedInUser->id ;
                         libraryUserPanel.user = *loggedInUser;
                         libraryUserPanel.menu(&transactionCount, &bookCount);
                     } else {

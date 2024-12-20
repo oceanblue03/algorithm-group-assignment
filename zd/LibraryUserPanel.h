@@ -57,19 +57,21 @@ class LibraryUserPanel {
             *transactionCount = transactionArrayCounter;
         }
 
-        void setupLibrary(int count) {
+        void setupLibrary(int* count) {
             f.open("books.csv");
-            for (int i = 0; i < count; i++) {
+            * count = stoi(getCell(0, 5));
+            for (int i = 0; i < *count; i++) {
                 library[i].ID = stoi(getCell(i + 1, 0));
                 library[i].Title = getCell(i + 1, 1);
                 library[i].author = getCell(i + 1, 2);
                 library[i].category = getCell(i + 1, 3);
                 if(stoi(getCell(i + 1, 4)) == 1){
-                    library[i].availability = "true";
+                    library[i].availability = "available";
                 }else{
-                    library[i].availability = "false";
+                    library[i].availability = "unavailable";
                 }
             }
+            f.close();
         }
 
         void searchBooks() {
@@ -115,7 +117,25 @@ class LibraryUserPanel {
                 }
             }
             if (!bookExist){
-                cout << "Book Id does not exist do you want to enter the id again?\n1. yes\2. no\n";
+                cout << "Book Id does not exist do you want to enter the id again?\n1. yes\n2. no\n";
+                userInput =  getOptionInput(2,"Enter: ");
+                switch (userInput) {
+                case 1:
+                    borrowBooks();
+                    break;
+                case 2:
+                    return;
+                    break;
+                default:
+                    handleError();
+
+                }
+            return;
+
+            }
+
+            if (borrowedBook.availability == "unavailable"){
+                cout << "The Book is unavailable do you want to enter the id again?\n1. yes\2. no\n";
                 userInput =  getOptionInput(2,"Enter: ");
                 switch (userInput) {
                 case 1:
@@ -150,6 +170,8 @@ class LibraryUserPanel {
                 default:
                     handleError();
             }
+
+            
 
             Transactions t;
             t.bookID = borrowedBook.ID;

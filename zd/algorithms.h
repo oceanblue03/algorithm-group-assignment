@@ -18,7 +18,7 @@ struct Books{
 struct Transactions{
     int receiptNumber;
     int bookID;
-    string userID;
+    int userID;
     string date;
 };
 
