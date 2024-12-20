@@ -10,13 +10,7 @@ int main(){
     int count = 0;
     int bookID;
     int userID;
-    string username = "Hi";
-    string password = "bye";
     Admin admin;
-    if(!admin.authentication(&username , &password)){
-        return 1;
-    }
-
     int option;
     
     while (true){

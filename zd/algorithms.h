@@ -26,8 +26,9 @@ bool compareStr(string a, string b);
 void sort(string library[]);
 string getCell(int row, int col);
 
-const int ARRAY_SIZE = 5;
+const int ARRAY_SIZE = 100;
 ifstream f;
+ofstream outFile;
 
 void sortByTitle(Books library[]) {
     for (int i = 0; i < ARRAY_SIZE; i++) {
@@ -100,8 +101,25 @@ string getCell(int row, int col) {
 
     f.clear();
     f.seekg(0);
-
     return b;
+}
+
+int countLines(const string& filename) {
+    ifstream inFile(filename);
+    if (!inFile.is_open()) {
+        cerr << "Unable to open file." << endl;
+        return -1; 
+    }
+
+    string line;
+    int lineCount = 0;
+
+    while (getline(inFile, line)) {
+        lineCount++; 
+    }
+
+    inFile.close(); 
+    return lineCount;
 }
 
 int binarySearchBooks(struct Books books[] , int low , int high , int ID){
